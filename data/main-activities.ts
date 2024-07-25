@@ -1,0 +1,26 @@
+const activities = [
+  { id: 1, name: "Agua" },
+  { id: 2, name: "Armas y productos militares" },
+  { id: 3, name: "Automotriz / autopartes" },
+  { id: 4, name: "Cosméticos" },
+  { id: 5, name: "Cuero y calzado" },
+  { id: 6, name: "Cómputo y electrónica" },
+  { id: 7, name: "Electricidad" },
+  { id: 8, name: "Electrodomésticos" },
+  { id: 9, name: "Farmacéutico" },
+  { id: 10, name: "Gas" },
+  { id: 11, name: "Joyas" },
+  { id: 12, name: "Juguetes" },
+  { id: 13, name: "Maquinaria y equipo" },
+  { id: 14, name: "Metalúrgica" },
+  { id: 15, name: "Minería" },
+  { id: 16, name: "Muebles" },
+  { id: 17, name: "Piedras y metales preciosos" },
+  { id: 18, name: "Tabaco" },
+  { id: 19, name: "Vehículos de transporte aéreos" },
+  { id: 20, name: "Vehículos de transporte marítimos" },
+  { id: 21, name: "Vehículos de transporte terrestres" },
+  { id: 22, name: "Servicios de Salud y de Asistencia Social" },
+];
+
+export { activities };

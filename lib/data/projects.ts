@@ -1,0 +1,44 @@
+// import { Project } from "@prisma/client";
+import { PaginatedResponse, Project } from "../definitions";
+
+// utils/api/products.ts
+export async function fetchProjectsForPage(page: number) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/projects/list?page=${page}`,
+  );
+  return await response.json();
+}
+// SCOPE: server requests
+// export async function fetchInitialProjects(): Promise<Partial<Project>[]> {
+// export async function fetchInitialProjects(): Promise<
+// PaginatedResponse<Partial<Project>>
+// > {
+export async function fetchInitialProjects(): Promise<
+  PaginatedResponse<Project>
+> {
+  // const response = await fetch(`/api/projects?page=1`);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/projects/list?page=1`,
+    // { next: { revalidate: 15 } },
+  );
+
+  if (!response.ok) {
+    throw new Error(`API request failed with status code ${response.status}`);
+  }
+  const data = await response.json();
+  console.log("DTA >>>>>>", data);
+  return data;
+}
+
+export async function fetchProjectById(id: string): Promise<Project> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`,
+  );
+  if (!response.ok) {
+    throw new Error(`API request failed with status code ${response.status}`);
+  }
+
+  const resTOJSON = await response.json();
+  console.log("DTA >>>>>>", resTOJSON.data);
+  return resTOJSON.data;
+}

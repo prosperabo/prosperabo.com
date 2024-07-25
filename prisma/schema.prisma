@@ -1,0 +1,307 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// REF.: https://www.prisma.io/docs/orm/prisma-client/deployment/edge/deploy-to-vercel#vercel-postgres
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+// Enumeración para definir los roles disponibles
+enum RoleType {
+  INVESTOR // Usuario que contribuye/invierte en proyectos.
+  OWNER // Propietario o empresa que crea proyectos. // REVIEW: EN ESTA FASE NO SE IMPLEMENTA
+  ADMIN // Administrador del sistema que tiene privilegios adicionales para administrar usuarios, proyectos, etc.
+}
+
+// Modelo para representar los roles de los usuarios
+model Role {
+  id    Int      @id @default(autoincrement())
+  role  RoleType @default(INVESTOR)
+  users User[] // Relación con los usuarios que tienen este rol
+}
+
+// NOTE: SOLUCION TEMPORAL. Modelo para representar los usuarios con acceso a la aplicación de adminisración TODO: Establecer gestión de usuarios, roles, permisos, etc. cuándo sea defina el tipo de gestión de usuarios.
+model AuthorizedUser {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  isAuthorized Boolean  @default(false)
+  role         RoleType @default(ADMIN)
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// Modelo para representar a los usuarios (propietarios/empresas/administradores)
+model User {
+  id             Int            @id @default(autoincrement())
+  email          String?        @unique
+  emailVerified  DateTime? // Changed becuase next-auth requires it to be a DateTime type
+  // emailVerified  Boolean?       @default(false)
+  name           String?
+  image          String?
+  role           String         @default("INVESTOR") // único rol, inicial simplificado para compatibilida con Mysql. Subroles & permisos siguiente fase   
+  password       String? // Campo para almacenar contraseñas hasheadas (si se permite autenticación por contraseña)
+  createdAt      DateTime?      @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt // TODO: En production quitar el default 
+  /// RELATIONS
+  accounts       Account[]
+  sessions       Session[]
+  // AuthProvider   AuthProvider? // AUTO GEN
+  roles          Role[] // Relación con los roles del usuario
+  authProviders  AuthProvider[] // Relación con los proveedores de autenticación
+  profile        Profile? // Relación con el perfil del usuario
+  projects       Project[] // Relación con los proyectos que ha creado el usuario
+  contributions  Contribution[] // Relación con las contribuciones del usuario
+  /// Relación con las empresas que ha creado
+  ownedCompanies Company[]      @relation("Owner") // Empresas que el usuario posee REVIEW: EN ESTA FASE NO SE IMPLEMENTA
+  companies      Company[]      @relation("UserCompany") // Empresas en las que el usuario participa
+  company        Company?       @relation(fields: [companyId], references: [id]) // establece una relación entre el usuario y la empresa,
+  companyId      Int? // lo que significa que un usuario puede o no estar asociado a una empresa. lo que refleja la naturaleza opcional de esta relación.
+}
+
+model VerificationToken {
+  id         Int      @id @default(autoincrement()) // REVISION: 
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model AuthProvider {
+  id       Int    @id @default(autoincrement())
+  provider String // Nombre del proveedor de autenticación (ej: "google", "facebook", "phone")
+  uid      String // Identificador único del usuario en ese proveedor
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int    @unique
+}
+
+enum CivilStatus {
+  SOLTERO
+  CASADO
+}
+
+enum Gender {
+  MASCULINO
+  FEMENINO
+}
+
+model Profile {
+  id                    Int          @id @default(autoincrement())
+  picture               String? // para SigninGoogle existe
+  bio                   String?
+  birthdate             DateTime?
+  civilStatus           CivilStatus?
+  educationDegree       String? // [primaria, secundaria, etc]
+  gender                Gender?
+  // TODO: PendieNte doc identidad  [PDF, IMAGE]
+  frontIdDocumentFile   String? // [URL] pdf, image... doc identidad
+  reverseIdDocumentFile String? // [URL] pdf, image... doc identidad
+  swornDeclaration      Boolean? // UI: declaración jurada
+  safetyNotices         Boolean? // UI: avisos de seguridad, representado por desplegado secuencial (accordion)
+  commercialContract    Boolean? // UI: contrato mercantil, representado por PDF y firmado OPT (code email)
+  contractSigningDate   DateTime? // UI: Fecha de firma del contrato comercial
+  // DATOS DE DEDICACIÓN/TRABAJO
+  occupation            String?
+  sector                String?
+  mainActivity          String?
+  /// DATOS DE LOCACION
+  address               String? // UI: lugar de nacimiento - departamentos
+  sinceDate             DateTime? // desde cuando vive en esta direccion (address)
+  typerOfHousing        String?
+  amountRetailPay       Decimal?
+  /// RELATIONS
+  user                  User         @relation(fields: [userId], references: [id])
+  userId                Int          @unique
+  // TODO: Otros campos pendiente a determinar
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @default(now()) @updatedAt
+}
+
+model MainCompanyContact {
+  id                        Int         @id @default(autoincrement())
+  fullName                  String
+  frontIdDocumentFile       String? // [URL] pdf, image... doc identidad
+  reverseIdDocumentFile     String? // [URL] pdf, image... doc identidad
+  civilStatus               CivilStatus
+  educationDegree           String // [primaria, secundaria, etc]
+  /// DATOS DE LOCACION
+  address                   String
+  sinceDate                 DateTime // desde cuando vive en esta direccion (address)
+  typeOfHousing             String
+  amountRetailPay           Decimal? // pago de alquiler si existe (opcional)
+  proofOfAddressFile        String? // [URL] pdf, image...  Luz/Agua o Gas 
+  /// DATOS DE OFICIO
+  occupation                String
+  mainActivity              String
+  economicDependents        Int         @default(0)
+  ownCar                    Boolean?    @default(false)
+  /// DATOS FINANCIEROS
+  // foodExpense               Decimal
+  // healthExpense             Decimal
+  // clothesExpense            Decimal
+  essentialExpenses         Decimal // alimentos salud ropa -> egresos esenciales
+  transportExpense          Decimal
+  entertainmentExpense      Decimal
+  insuranceExpense          Decimal
+  averageMonthlyIncome      Decimal
+  otherAverageMonthlyIncome Decimal
+  /// RELATIONS
+  company                   Company?    @relation(fields: [companyId], references: [id])
+  companyId                 Int?        @unique
+}
+
+// Modelo para representar las empresas
+model Company {
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  mission             String
+  logoFile            String? // [URL] pdf, image...
+  fundationDate       DateTime
+  phone               String
+  seprec              String? // opcional, dado que se solicito quitarlo
+  commercialRegister  String
+  licenceNumber       Int
+  nitNumber           String? // BigInt: trae efectos colaterales
+  licenceFile         String? // [URL] pdf, image...
+  nitFile             String? // [URL] pdf, image...
+  signedAffidavitFile String? // [URL] pdf, image...declaración jurada firmada - TODO: ??? Se piensa que se registrara cuando se asocie al "contacto principal" posible propietario
+  showCompany         Boolean?            @default(false) // creado pensando en la posibilidad de no mostrar ciertas empresas registradas hasta su conclusion de registros asociados
+  siteUrl             String?
+  locationUrl         String?
+  termsConditionsFile String? // [URL] pdf, image...
+  /// RELATIONS
+  owners              User[]              @relation("Owner") // Usuarios propietarios de la empresa REVIEW: EN ESTA FASE NO SE IMPLEMENTA
+  users               User[]              @relation("UserCompany") // Usuarios participantes de la empresa
+  projects            Project[] // Relación con los proyectos creados por la empresa
+  // mainUsers User[]    @relation("MainUser")
+  // Otros campos de empresa como dirección, descripción, etc.
+  User                User[]
+  MainCompanyContact  MainCompanyContact? // 1:1 MainUser es el contacto principal, simplemente son datos referenciales (requerido para este fase), no es un usuario
+  createdAt           DateTime?           @default(now())
+  updatedAt           DateTime?           @updatedAt
+}
+
+// Modelo para representar los proyectos/campañas de crowdfunding
+model Project {
+  id                Int            @id @default(autoincrement())
+  title             String
+  description       String
+  startDate         DateTime
+  endDate           DateTime
+  fundingDate       DateTime? // Fecha Estimada de Fondeo
+  targetAmount      Decimal // Meta maxima/ideal ??? REVISION: Cantidad a recaudar
+  minimumAmount     Decimal // Meta minima
+  qtyPortions       Int
+  valueByPortion    Decimal // targetAmount/qtyPortions
+  availablePortions Int // available init=qtyPortions
+  rate              Decimal // Tasa dada por el modelo financiero
+  riskLevel         Int // rateRisk??? Calificacion de riesgo: [1-100] {bajo[81-100], MDbajo[61-80], MD[41-60], MDAlto[21-40], Alto[1-20]}
+  financialInfoFile String? // [URL] pdf, image
+  status            Int?           @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  ///RELATIONS
+  creator           User           @relation(fields: [createdBy], references: [id])
+  createdBy         Int
+  Company           Company?       @relation(fields: [companyId], references: [id])
+  companyId         Int? // ID de la empresa asociada al proyecto
+  // TODO: Relación para las contribuciones/inversiones en el proyecto
+  contributions     Contribution[] // Relación para las contribuciones/inversiones en el proyecto
+  // owner             User?          @relation(fields: [ownerId], references: [id]) // REVIEW: EN ESTA FASE NO SE IMPLEMENTA ??? El propietario del proyecto es la empresa un el usuario
+  // ownerId           Int? // ID del usuario propietario del proyecto REVIEW: EN ESTA FASE NO SE IMPLEMENTA
+}
+
+// Modelo para representar las contribuciones/inversiones en un proyecto
+// status        ContributionStatus? @default(PENDING) // campo para el estado de la contribución, se utiliza en relacion con la transaccion
+model Contribution {
+  id            Int       @id @default(autoincrement())
+  amount        Float
+  qtyPortions   Int? // campo para la cantidad de porciones adquiridas
+  ///RELATIONS
+  projectId     Int // ID del proyecto al que se contribuye
+  project       Project   @relation(fields: [projectId], references: [id])
+  contributorId Int // ID del usuario que contribuye
+  contributor   User      @relation(fields: [contributorId], references: [id])
+  // TODO: Otros campos como estado de la contribución, método de pago, etc.
+  payment       Payment?  @relation(fields: [paymentId], references: [id])
+  paymentId     Int?      @unique
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  method        PaymentMethod
+  transactionId String        @unique
+  status        PaymentStatus @default(PENDING)
+  amount        Float
+  invoiceFile   String? // [URL] pdf, image NOTE: Para esta fase inicial se opta por no implementar con integraciòn bancaria, se guarda la url de la factura de transfeencia bancaria
+  ///RELATIONS
+  Contribution  Contribution?
+  createdAt     DateTime?     @default(now())
+  updatedAt     DateTime?     @updatedAt
+  // contributionId Int           @unique
+  // contribution   Contribution  @relation(fields: [contributionId], references: [id])
+}
+
+enum ContributionStatus {
+  PENDING
+  PAID // COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// TODO: next posible cambiar enum a string para que sea compatible con mysql
+enum PaymentMethod {
+  QR
+  CARD
+  TRANSFER
+  // TODO: Agregar más métodos de pago si es necesario
+}
+
+enum PaymentStatus {
+  PENDING // Use default value
+  REFUSED
+  PAID // COMPLETED, APPROVED // Se ha cobrado el pago para la orden.
+  FAILED
+  CANCELED
+  REFUNDED
+  // TODO: Agregar más estados de pago si es necesario
+}
