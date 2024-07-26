@@ -14,16 +14,13 @@ import { toast } from "@/components/ui/use-toast";
 //   [key in keyof ProfileModel]: ProfileModel[key];
 // };
 async function fetchData(payload: any, id: number) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/profile/${id}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profile/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(payload),
+  });
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -53,6 +50,8 @@ const WorkPage: React.FC = () => {
     { label: "Freelancer", value: "Freelancer" },
     { label: "Negocio Propio", value: "Negocio Propio" },
     { label: "Jubilad@", value: "Jubilad@" },
+    { label: "Estudiante", value: "Estudiante" },
+    { label: "Independiente", value: "Independiente" },
   ];
 
   const sectorOptions = [
@@ -143,7 +142,7 @@ const WorkPage: React.FC = () => {
       <Form.Root onSubmit={handleSubmit}>
         <section
           id="occupation"
-          className="mt-4 w-[360px] md:w-[687px] max-w-full max-md:mt-10"
+          className="mt-4 w-[360px] max-w-full max-md:mt-10 md:w-[687px]"
         >
           <Selection
             title="Ocupación"
@@ -157,7 +156,7 @@ const WorkPage: React.FC = () => {
 
         <section
           id="sector"
-          className="mt-16 w-[360px] md:w-[687px] max-w-full max-md:mt-10"
+          className="mt-16 w-[360px] max-w-full max-md:mt-10 md:w-[687px]"
         >
           <Selection
             title="Sector"
@@ -171,7 +170,7 @@ const WorkPage: React.FC = () => {
 
         <section
           id="select-main-activity"
-          className="lg:ml-0 mt-16 w-[360px] md:w-[687px] max-w-full max-md:mt-10"
+          className="mt-16 w-[360px] max-w-full max-md:mt-10 md:w-[687px] lg:ml-0"
         >
           <Select
             title="Actividad principal"
@@ -186,7 +185,7 @@ const WorkPage: React.FC = () => {
 
         <section
           id="actions"
-          className="mt-20 flex w-[360px] md:w-[687px] max-w-full justify-around gap-5 whitespace-nowrap text-xl font-extrabold text-white max-md:mt-10 max-md:flex-wrap"
+          className="mt-20 flex w-[360px] max-w-full justify-around gap-5 whitespace-nowrap text-xl font-extrabold text-white max-md:mt-10 max-md:flex-wrap md:w-[687px]"
         >
           <Button
             variant={"outline"}

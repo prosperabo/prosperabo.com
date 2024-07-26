@@ -135,7 +135,7 @@ const SafetyNotices = () => {
         </section>
         <Alert
           variant={"warning"}
-          className={`mt-10 w-[500px] ${checkin ? "" : "hidden"}`}
+          className={`mt-10 w-[360px] md:w-[500px] ${checkin ? "" : "hidden"}`}
         >
           <AlertTriangleIcon className="h-4 w-4" />
           <AlertTitle>¡Atención!</AlertTitle>

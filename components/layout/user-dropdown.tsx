@@ -11,6 +11,7 @@ import { resetAllStores } from "@/stores/index";
 import { fetchVerifySignContract } from "@/lib/data/profile";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/auth/user/user.store";
+import { useRouterRefStore } from "@/stores/route-ref/routeref.store";
 import { toast } from "@/components/ui/use-toast";
 
 export default function UserDropdown({ session }: { session: Session }) {
@@ -18,6 +19,7 @@ export default function UserDropdown({ session }: { session: Session }) {
   const [openPopover, setOpenPopover] = useState(false);
   const userId = parseInt(session.user.id);
   const { setProfileExist } = useUserStore();
+  const { setRouteRef } = useRouterRefStore();
   const router = useRouter();
   if (!email) return null;
 
@@ -36,6 +38,8 @@ export default function UserDropdown({ session }: { session: Session }) {
         description: "Esta acción es necesaria para poder invertir",
         variant: "default",
       });
+      setRouteRef(`/#projects`);
+
       return router.push("/profile");
     } else if (
       verifiedContrat?.contractSigningDate !== null &&
@@ -49,6 +53,7 @@ export default function UserDropdown({ session }: { session: Session }) {
       return router.push("/");
     } else {
       setProfileExist(true);
+      setRouteRef(`/#projects`);
       toast({
         title: "Continúe completando el formulario",
         description: "Este paso es necesario para poder invertir",

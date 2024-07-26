@@ -73,10 +73,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
             className="mt-6 grid grid-cols-6 items-center justify-center gap-2 text-center align-middle sm:mt-10 sm:grid-cols-3 md:mt-6 md:grid-cols-6 lg:mt-6 lg:grid-cols-6"
           >
             <LinkImage
-              link={
-                project?.Company?.locationUrl ||
-                "https://maps.app.goo.gl/QrSPLYHYQG1XRn9E7"
-              }
+              link={project?.Company?.locationUrl}
               imageUrl="/py-location.svg"
               className="col-span-1 col-start-2"
             />
@@ -88,7 +85,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
             <div className="col-span-3 items-center justify-center sm:col-span-3 md:col-span-3 lg:col-span-3">
               {/* <TermsConditions url={project?.Company?.termsConditionsFile} /> */}
               <TermsConditions
-                url={`${process.env.NEXT_PUBLIC_API_URL}/company/${project.companyId}/${project?.Company?.termsConditionsFile}`}
+                url={`${process.env.NEXT_PUBLIC_API_URL}/company/${project?.companyId}/${project?.Company?.termsConditionsFile}`}
                 // url={`/api/proxy/${process.env.NEXT_PUBLIC_API_VERSION}/company/${project.companyId}/${project?.Company?.termsConditionsFile}`}
               />
             </div>
