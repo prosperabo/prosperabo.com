@@ -19,6 +19,8 @@ export async function fetchInitialProjects(): Promise<
   // const response = await fetch(`/api/projects?page=1`);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/projects/list?page=1`,
+    { cache: "no-store" },
+    // { cache: "force-cache" },
     // { next: { revalidate: 15 } },
   );
 
@@ -26,13 +28,14 @@ export async function fetchInitialProjects(): Promise<
     throw new Error(`API request failed with status code ${response.status}`);
   }
   const data = await response.json();
-  console.log("DTA >>>>>>", data);
+  console.log("DATA >>>>>>", data);
   return data;
 }
 
 export async function fetchProjectById(id: string): Promise<Project> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`,
+    { cache: "no-store" },
   );
   if (!response.ok) {
     throw new Error(`API request failed with status code ${response.status}`);

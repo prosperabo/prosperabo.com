@@ -21,7 +21,7 @@ const ProjectCards: React.FC<Props> = ({ projects }) => {
           // className="flex h-full w-full max-w-96 border-spacing-3 flex-col items-center justify-center rounded-xl border-4 bg-black px-3 "
         >
           {projects[0] ? (
-            <section>
+            <section className="flex h-full w-full flex-col items-center justify-center"> 
               <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                 <button className="-mt-5 flex w-36 justify-center rounded-md border-2 border-gray-300 bg-gray-950 px-3 py-3 transition-all duration-75 hover:border-white focus:outline-none active:bg-accent">
                   <Link

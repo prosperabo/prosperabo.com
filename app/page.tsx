@@ -102,7 +102,7 @@ export default async function Home() {
           id="team"
           className="mt-24 w-[360px] max-w-3xl items-center justify-center gap-16 px-3 pb-20 align-middle text-white max-md:max-w-full max-md:pl-5 sm:w-full xl:px-0"
         >
-          <h2 className="col-span-4 pb-10 text-center text-3xl uppercase text-white lg:text-6xl">
+          <h2 className="col-span-4 pb-10 text-center text-3xl uppercase text-white lg:text-5xl">
             Nuestro Equipo
           </h2>
           <TeamMenbers />
