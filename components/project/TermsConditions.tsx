@@ -1,5 +1,10 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
+// import PDFViewer from "@/components/shared/PDFViewer";
+import dynamic from "next/dynamic";
+const PDFViewer = dynamic(() => import("@/components/shared/PDFViewer"), {
+  ssr: false,
+});
 import {
   Dialog,
   DialogContent,
@@ -20,7 +25,7 @@ const FinancialStatement: React.FC<FinancialStatementProps> = ({ url }) => {
 
   return (
     <Dialog>
-      <DialogTrigger className="mr-5 justify-center self-end rounded-[48px] border-[3px] border-solid border-white px-5 text-base font-extrabold sm:mr-2.5 sm:mt-10 md:mr-5 md:mt-0 lg:mr-5 2xl:mt-0">
+      <DialogTrigger className="mr-1 flex justify-center self-end rounded-[48px] border-[3px] border-solid border-white px-5 text-base font-extrabold sm:mr-2.5 sm:mt-10 md:mr-5 md:mt-0 md:py-4 lg:mr-5 lg:text-xl 2xl:mt-0">
         Términos y condiciones
       </DialogTrigger>
       <DialogContent className="h-screen bg-slate-200 bg-gradient-to-bl from-teal-800 from-0% via-slate-950 via-100% to-accent to-90% sm:max-w-[425px] lg:max-w-full">
@@ -44,8 +49,19 @@ const FinancialStatement: React.FC<FinancialStatementProps> = ({ url }) => {
             width="80%"
             aria-controls="Términos y Condiciones"
             title="Términos y Condiciones"
-            className="h-screen border-0"
+            className="hidden h-screen border-0 md:block"
           ></iframe>
+          {/* display/renderzed only on screens smaller than md */}
+          {url && (
+            <Suspense fallback={<div>Loading...</div>}>
+              <PDFViewer
+                fileUrl={url?.replace(
+                  replaceOrigin,
+                  `/api/proxy/${process.env.NEXT_PUBLIC_API_VERSION}`,
+                )}
+              />
+            </Suspense>
+          )}
         </section>
       </DialogContent>
     </Dialog>

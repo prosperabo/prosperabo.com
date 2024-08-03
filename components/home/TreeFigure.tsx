@@ -17,7 +17,7 @@ const TreeFigure = () => {
   ];
   return (
     <div className="flex h-96 items-center justify-center">
-      <div className="relative h-[400px] w-[480px] md:w-[500px]" ref={ref}>
+      <div className="relative h-[400px] w-[360px] md:w-[500px]" ref={ref}>
         <div className="absolute left-1/2 top-1/3 h-full w-2 -translate-x-1/2 -translate-y-1/2 transform bg-white"></div>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
           <div className="relative">

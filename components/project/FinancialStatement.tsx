@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,6 +8,10 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import dynamic from "next/dynamic";
+const PDFViewer = dynamic(() => import("@/components/shared/PDFViewer"), {
+  ssr: false,
+});
 
 interface FinancialStatementProps {
   url: string | null;
@@ -27,9 +31,10 @@ const FinancialStatement: React.FC<FinancialStatementProps> = ({ url }) => {
           <DialogTitle className="text-white">Extracto Financiero</DialogTitle>
           <DialogDescription>...</DialogDescription>
         </DialogHeader>
-        <section className="flex h-screen items-center justify-center">
+        <section className="flex h-screen w-full items-center justify-center">
+          {/* display/renderzed only on screens larger than md */}
           <iframe
-            suppressHydrationWarning={true}
+            // suppressHydrationWarning={true}
             src={
               url
                 ? url?.replace(
@@ -39,11 +44,28 @@ const FinancialStatement: React.FC<FinancialStatementProps> = ({ url }) => {
                 : "/TestPDFfile.pdf"
             }
             height="100%"
-            width="80%"
+            width="100%"
             aria-controls="Extracto Financiero"
             title="Extracto Financiero"
-            className="h-screen border-0"
+            className="hidden md:block"
+            // className="h-screen border-0"
           ></iframe>
+
+          {/* display/renderzed only on screens smaller than md */}
+          <Suspense fallback={<div>Loading...</div>}>
+            <PDFViewer
+              fileUrl={
+                url
+                  ? url?.replace(
+                      replaceOrigin,
+                      `/api/proxy/${process.env.NEXT_PUBLIC_API_VERSION}`,
+                    )
+                  : "/TestPDFfile.pdf"
+              }
+            />
+            /
+          </Suspense>
+          {/* <PDFViewer fileUrl="/TestPDFfile.pdf" /> */}
         </section>
       </DialogContent>
     </Dialog>

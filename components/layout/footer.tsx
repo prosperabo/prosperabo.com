@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <div className="absolute mb-0 w-full py-5 text-center lg:px-4">
-      <div className="my-10 flex flex-col items-center justify-center gap-4 border-cyan-950 bg-transparent px-5 md:px-12 xl:flex-row lg:justify-between xl:mx-auto xl:max-w-screen-xl">
+      <div className="my-10 flex flex-col items-center justify-center gap-4 border-cyan-950 bg-transparent px-5 md:px-12 lg:justify-between xl:mx-auto xl:max-w-screen-xl xl:flex-row">
         <section className="flex flex-col items-center justify-center gap-4 text-slate-50 md:flex-row md:gap-12 md:text-left">
           <div className="font-['Inter', 'system-ui', 'sans-serif'] text-2xl md:text-4xl">
             Contáctanos
@@ -47,7 +47,6 @@ export default function Footer() {
           </Link>
         </section>
       </div>
-      ;
     </div>
   );
 }

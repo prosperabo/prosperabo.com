@@ -129,7 +129,7 @@ const CalculatorBuy: React.FC<CalculatorProps> = ({
         <div className="rounded-2xl border-[7px] border-solid border-white px-9 pb-6 pt-7 max-md:mt-10 max-md:max-w-full max-md:px-5 sm:px-5 md:mt-14 md:max-w-full md:px-9 lg:mt-14 lg:max-w-full lg:px-9 xl:mt-14">
           <div className="flex gap-5 sm:flex-col sm:gap-0 md:flex-row md:gap-5 lg:flex-row lg:gap-5">
             <div className="flex w-[71%] flex-col sm:ml-0 sm:w-full md:ml-0 md:w-[71%] lg:ml-0 lg:w-[71%]">
-              <div className="my-auto flex flex-col self-stretch text-xl font-bold text-white max-md:mt-10">
+              <div className="my-auto flex flex-col self-stretch text-lg md:text-2xl font-bold text-white max-md:mt-10">
                 <h3>SocioCredits a adquirir</h3>
                 <div className="mt-16 max-md:mt-10">Precio Unitario</div>
                 <div className="mt-12 max-md:mt-10">Tu Costo Total</div>
@@ -169,7 +169,7 @@ const CalculatorBuy: React.FC<CalculatorProps> = ({
         </div>
         <section
           id="actions"
-          className="my-5 flex gap-4 text-2xl font-extrabold text-white sm:mt-10 sm:flex-wrap md:mt-16 md:flex-nowrap lg:mt-16 lg:flex-nowrap"
+          className="my-5 flex gap-4 font-extrabold text-white sm:mt-10 sm:flex-wrap md:mt-16 md:flex-nowrap md:text-2xl lg:mt-16 lg:flex-nowrap"
         >
           {children}
           <button

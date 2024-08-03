@@ -10,6 +10,11 @@ const nextConfig = {
       "localhost",
     ], // TODO: update domains
   },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
+  },
+
   async redirects() {
     // TODO: *Redirigir después de iniciar sesión, Redirigir a la página de campaña, * Redirigir después de una acción, *Redirigir desde enlaces externos, ...
     return [

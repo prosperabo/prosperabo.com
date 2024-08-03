@@ -13,11 +13,11 @@ const ProjectCards: React.FC<Props> = ({ projects }) => {
   const projectsQty = projects.length;
   const skeletonQty = projectsQty === 0 ? 1 : projectsQty;
   return (
-    <div className="grid max-w-3xl  grid-flow-row-dense grid-cols-1 gap-4 sm:grid-cols-1 md:grid-rows-2 lg:h-[400px] lg:grid-flow-col lg:grid-cols-none ">
+    <div className="grid max-w-3xl grid-flow-row-dense grid-cols-1 gap-4 sm:grid-cols-1 md:grid-rows-2 lg:h-[400px] lg:grid-flow-col lg:grid-cols-none ">
       <div className="xs:col-span-1 bg-trasparent flex min-w-min items-center justify-center rounded-md p-2 text-white sm:col-span-2 md:row-span-2 lg:max-w-max">
         <section
           id="image-project"
-          className="relative flex h-full w-full max-w-72 border-spacing-3 flex-col items-center justify-center rounded-xl border-4 bg-black px-3 transition-opacity duration-300 hover:opacity-80"
+          className="relative py-5 md:py-0 flex h-full w-full max-w-72 border-spacing-3 flex-col items-center justify-center rounded-xl border-4 bg-black px-3 transition-opacity duration-300 hover:opacity-80"
           // className="flex h-full w-full max-w-96 border-spacing-3 flex-col items-center justify-center rounded-xl border-4 bg-black px-3 "
         >
           {projects[0] ? (

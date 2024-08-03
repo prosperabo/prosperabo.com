@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 import StatusBadge from "@/components/shared/utils/StatusBadge";
 import RiskBadge from "@/components/shared/utils/RiskBadge";
@@ -24,15 +24,15 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
   // console.log("project", project);
 
   return (
-    <div className="w-full z-20 bg-gradient-to-bl from-teal-800 from-0% via-slate-950 via-50% to-accent to-100%">
-      <div className="container mix-auto h-full ip-4 pb-48 pt-6 sm:grid-cols-2 md:grid-cols-2 lg:grid lg:grid-cols-2">
+    <div className="z-20 w-full bg-gradient-to-bl from-teal-800 from-0% via-slate-950 via-50% to-accent to-100%">
+      <div className="mix-auto ip-4 container h-full pb-48 pt-6 sm:grid-cols-2 md:grid-cols-2 lg:grid lg:grid-cols-2">
         <ScrollToTop />
         <h1 className="col-span-2 justify-center text-center text-2xl font-light text-white max-md:mt-10 max-md:max-w-full max-md:text-2xl lg:text-4xl">
           Elige tus campañas
         </h1>
         <section
           id="logo_company-project"
-          className="col-span-2 flex flex-col items-center justify-center px-8  sm:col-span-2 md:col-span-1 lg:col-span-1"
+          className="col-span-2 flex flex-col items-center justify-center px-2 sm:col-span-2  md:col-span-1 lg:col-span-1 lg:px-8"
         >
           <Image
             // src={`${'https://cdn.builder.io/api/v1/image/assets/TEMP/c203068768a3269c9778917767a950f031685da70a981f7eb83432b02ed5a0db'|| "/py-location.svg"}  `}
@@ -45,7 +45,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
           <div
             id="title-project-networks"
             // className="ml-32 mt-10 flex w-[464px] max-w-full flex-col text-white"
-            className="mx-auto mt-10 flex max-w-[464px] flex-col text-white sm:mx-2.5 sm:mt-10 sm:max-w-full md:mx-auto md:mt-10 md:max-w-[464px] lg:mx-auto lg:mt-10 lg:max-w-[464px]"
+            className="mx-auto mt-10 flex max-w-[364px] flex-col text-white sm:mx-2.5 sm:mt-10 sm:max-w-full md:mx-auto md:mt-10 md:max-w-[464px] lg:mx-auto lg:mt-10 lg:max-w-[464px]"
           >
             <div className="text-center text-5xl font-bold max-md:max-w-full max-md:text-4xl sm:max-w-full sm:text-4xl md:max-w-full md:text-4xl lg:text-5xl">
               {project?.title}
@@ -53,7 +53,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
             <h3 className="text-center">
               Por la Empresa: {project?.Company?.name}
             </h3>
-            <div className="my-4 flex items-center justify-center gap-3">
+            <div className="my-4 flex items-center justify-center gap-0.5 lg:gap-3">
               <StatusBadge status={parseInt(project?.status)} />:
               <Progress
                 value={
@@ -70,7 +70,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
             </div>
             <section
               id="links-external"
-              className="mt-6 grid grid-cols-6 items-center justify-center gap-2 text-center align-middle sm:mt-10 sm:grid-cols-3 md:mt-6 md:grid-cols-6 lg:mt-6 lg:grid-cols-6"
+              className="mt-3 flex items-center justify-center gap-2 text-center align-middle sm:mt-10 sm:grid-cols-3 md:mt-6 md:grid-cols-6 lg:mt-6 lg:grid-cols-6"
             >
               <LinkImage
                 link={project?.Company?.locationUrl}
@@ -105,7 +105,13 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
           >
             <FinancialStatement url={project?.financialInfoFile} />
           </CalculatorBuy>
-          <InvestmentSimulator rate={parseInt(project?.rate)} />
+          {project?.rate !== null ? (
+            <Suspense fallback={<div>Loading...</div>}>
+              <InvestmentSimulator rate={parseInt(project?.rate)} />
+            </Suspense>
+          ) : (
+            <div>Loading...</div>
+          )}
         </section>
 
         <p className="col-span-2 mt-24 justify-center px-4 text-center text-base text-white sm:max-w-full sm:px-5 md:text-xl lg:px-24 lg:text-base">

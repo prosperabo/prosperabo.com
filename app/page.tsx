@@ -51,7 +51,7 @@ export default async function Home() {
         </section>
         <section
           id="about"
-          className="mt-24 flex h-screen w-[360px]  max-w-3xl animate-fade-up flex-col items-center justify-center px-3 align-middle text-white max-md:max-w-full sm:mt-0 sm:w-full xl:px-0 "
+          className="mt-24 flex h-screen w-[360px]  max-w-3xl animate-fade-up flex-col items-center justify-center align-middle text-white max-md:max-w-full sm:mt-0 sm:w-full xl:px-0 "
         >
           <h2 className="pb-10 text-3xl lg:mb-8 lg:text-5xl">
             ¿Quiénes somos?
