@@ -17,7 +17,6 @@ const page = async () => {
   }
   const userId = parseInt(session.user.id);
   const contributions = await fetch_getContributionsByInvestor(userId);
-  // console.log(contributions);
   return (
     <div className="flex grid-cols-1 flex-col items-center justify-center gap-4 md:grid md:grid-cols-3 md:items-start md:justify-start lg:px-12">
       <section

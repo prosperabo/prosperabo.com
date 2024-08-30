@@ -8,7 +8,7 @@ const Balance = () => {
 
   return (
     <>
-      {contribution?.payment.status !== "CANCELED" || contribution && (
+      {contribution?.payment.status !== "CANCELED"  && (
         <div
           id="card-container"
           className="rounded-2xl border-[5px] border-solid border-white text-white lg:p-6"
