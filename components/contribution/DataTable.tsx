@@ -21,6 +21,7 @@ interface Props {
 
 const DataTable: React.FC<Props> = ({ contributions }) => {
   const { setContribution, contribution } = useContributionStore();
+  
   return (
     <div
       id="data-table"
