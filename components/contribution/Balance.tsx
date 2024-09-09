@@ -36,8 +36,7 @@ const Balance = () => {
                   ? `${(
                       ((parseFloat(contribution?.project.rate) *
                         contribution?.amount) /
-                        100) *
-                        contribution.qtyPortions +
+                        100) +
                       contribution?.amount
                     ) // TODO: Calcular el tiempo de la inversión, y confirma que el rendimiento se calcula correctamente (si es por porción o por año)
                       .toLocaleString("en-BO", {
