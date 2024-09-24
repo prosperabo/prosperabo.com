@@ -48,7 +48,7 @@ const ProjectCards: React.FC<Props> = ({ projects }) => {
                   projects[0].availablePortions === 0
                     ? 100
                     : Math.min(
-                        (projects[0].availablePortions /
+                        (1 - projects[0].availablePortions /
                           projects[0].qtyPortions) *
                           100,
                         100,
