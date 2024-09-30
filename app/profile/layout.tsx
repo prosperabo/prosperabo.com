@@ -26,8 +26,8 @@ export default async function ProfileLayout({
     (await verifiedContrat.commercialContract) !== null &&
     (await verifiedContrat?.contractSigningDate) !== null
   ) {
-    redirect("/");
-    return null; // not continue after redirect
+    // redirect("/");
+    // return null; // not continue after redirect
   }
 
   return (
