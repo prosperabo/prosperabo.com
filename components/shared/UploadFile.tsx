@@ -142,14 +142,20 @@ const UploadFile = ({
         <p className="leading-1 mt-2 text-base font-normal text-gray-600">
           {description}
         </p>
+        <Image
+          src="/pago_qr.jpg"
+          alt="Pago QR"
+          width={250}
+          height={300}
+          className="mx-auto my-4"
+        />
         <Button
           size={"custom"}
           variant={"custom"}
           onClick={uploadHandler}
           disabled={!selectedFile || isLoading}
-          className={`mt-4  font-medium ${
-            selectedFile && !isLoading ? "linear" : "bg-gray-500 text-white"
-          }`}
+          className={`mt-4  font-medium ${selectedFile && !isLoading ? "linear" : "bg-gray-500 text-white"
+            }`}
         >
           {isLoading ? (
             <span className="flex justify-center align-middle">
