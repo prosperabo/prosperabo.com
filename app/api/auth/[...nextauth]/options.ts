@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { Role } from "../../../../enums/user/role";
+import { googleClient, nextAuthSecret } from "../../../../services/config";
 // import { RoleType } from "@prisma/client";
 
 // REF.: https://next-auth.js.org/configuration/providers/oauth#using-a-custom-provider
@@ -9,11 +10,11 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 1 * 60 * 60 * 3, // 3 hours
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: nextAuthSecret,
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: googleClient.g_client_id,
+      clientSecret: googleClient.g_client_secret,
       profile(profile) {
         console.log(">>>>>profile", profile);
         return {

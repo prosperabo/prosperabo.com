@@ -6,8 +6,8 @@ export const db = {
 };
 
 export const googleClient = {
-  g_client_id: process.env.GOOGLE_CLIENT_ID || 'GOOGLE_CLIENT_ID',
-  g_client_secret: process.env.GOOGLE_CLIENT_SECRET || 'GOOGLE_CLIENT_SECRET',
+  g_client_id: String(process.env.GOOGLE_CLIENT_ID) || 'GOOGLE_CLIENT_ID',
+  g_client_secret: String(process.env.GOOGLE_CLIENT_SECRET) || 'GOOGLE_CLIENT_SECRET',
 };
 
 export const nextAuthSecret = process.env.NEXTAUTH_SECRET || 'NEXTAUTH_SECRET';
@@ -21,7 +21,7 @@ export const bank = {
   name: process.env.NEXT_PUBLIC_BANK_NAME || 'NEXT_PUBLIC_BANK_NAME',
   companyName: process.env.NEXT_PUBLIC_COMPANY_NAME || 'NEXT_PUBLIC_COMPANY_NAME',
 };
-
+// Can't change it on next.config.js
 export const baseUrl = process.env.BASE_URL || 'BASE_URL';
 
 export const apiVersion = process.env.API_VERSION || 'API_VERSION';
