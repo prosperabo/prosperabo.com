@@ -1,4 +1,5 @@
 import "./globals.css";
+import { GoogleAnalytics } from '@next/third-parties/google'
 // import cx from "classnames";
 import { inter } from "./fonts";
 import Nav from "@/components/layout/nav";
@@ -36,6 +37,7 @@ export default async function RootLayout({
         <Toaster />
         <Footer />
       </body>
+      <GoogleAnalytics gaId="G-TGRGEJ6213"/>
     </html>
   );
 }
