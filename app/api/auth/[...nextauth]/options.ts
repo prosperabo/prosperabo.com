@@ -6,6 +6,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 // REF.: https://next-auth.js.org/configuration/providers/oauth#using-a-custom-provider
 export const authOptions: NextAuthOptions = {
+  debug: true,
   session: {
     strategy: "database",
   },
@@ -37,4 +38,5 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  
 };

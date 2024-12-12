@@ -11,6 +11,7 @@ import {
 import SafetyNotices from "./SafetyNotices";
 import { useUserStore } from "@/stores/auth/user/user.store";
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useRouterRefStore } from "@/stores/route-ref/routeref.store";
 import { fetchVerifySignContract } from "@/lib/data/profile";
 
@@ -54,7 +55,8 @@ const CalculatorBuy: React.FC<CalculatorProps> = ({
       setTotal(qtyPortions * priceUnit);
     }
   };
-  const { user, setProfileExist } = useUserStore();
+  const { data: session, status } = useSession();
+  const { user, setUser, setProfileExist } = useUserStore();
   const router = useRouter();
   const { setRouteRef } = useRouterRefStore();
   const pathname = usePathname();
@@ -68,7 +70,6 @@ const CalculatorBuy: React.FC<CalculatorProps> = ({
       });
       return;
     }
-
     // SCOPE: CHECK IF USER IS LOGGED IN
     if (user === null) {
       toast({
